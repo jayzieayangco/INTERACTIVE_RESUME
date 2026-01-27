@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trainer Profile Resume</title>
-	<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -21,7 +21,7 @@
 
             <div class="main-body" id="cardContent">
                 <div class="left-info">
-                    <div class="info-row"><span class="bullet"></span> <div class="label-text">NAME</div> <div class="underline">Lunos</div></div>
+                    <div class="info-row"><span class="bullet"></span> <div class="label-text">NAME</div> <div class="underline">Jayzie Ayangco</div></div>
                     <div class="info-row"><span class="bullet"></span> <div class="label-text">COURSE</div> <div class="underline">Computer Engineering</div></div>
                     <div class="info-row"><span class="bullet"></span> <div class="label-text">CLASS</div> <div class="underline">Web Developer</div></div>
                     <div class="info-row"><span class="bullet"></span> <div class="label-text">LEVEL</div> <div class="underline">3rd Year</div></div>
@@ -50,7 +50,7 @@
                     <div class="badge-box has-info">
                         <div class="badge-box-inner"></div>
                         <img src="assets/badge3.png" alt="">
-                        <div class="badge-popup"><b>Math Silver</b><br>2nd Place Basic Math - 120th PUP Founding.</div>
+                        <div class="badge-popup"><b>Math Competition</b><br>2nd Place Basic Math - 120th PUP Founding.</div>
                     </div>
                     <div class="badge-box has-info">
                         <div class="badge-box-inner"></div>
@@ -71,13 +71,17 @@
 
         <div class="belt-container">
             <div class="button-row">
-                <div class="belt-btn" onclick="toggleCategory(this, 'PARTY')">🐾</div>
-                <div class="belt-btn" onclick="toggleCategory(this, 'POKEDEX')">📖</div>
-                <div class="belt-btn" onclick="toggleCategory(this, 'KEY ITEMS')">🔑</div>
-                <div class="belt-btn" onclick="toggleCategory(this, 'SETTINGS')">⚙️</div>
+                <div class="belt-btn" onclick="toggleCategory(this, 'PARTY')"><img src="assets/btn_party.png" class="belt-icon-img"></div>
+                <div class="belt-btn" onclick="toggleCategory(this, 'PROJECT')"><img src="assets/btn_pokedex.png" class="belt-icon-img"></div>
+                <div class="belt-btn" onclick="toggleCategory(this, 'CERTIFICATE')"><img src="assets/btn_items.png" class="belt-icon-img"></div>
+                <div class="belt-btn" onclick="toggleCategory(this, 'SETTINGS')"><img src="assets/btn_settings.png" class="belt-icon-img"></div>
             </div>
             <div class="belt-bar"></div>
         </div>
+
+        <audio id="bgMusic" loop>
+            <source src="assets/bg.mp3" type="audio/mpeg">
+        </audio>
 
         <div class="side-panel" id="sidePanel">
             <div class="nav-category map-bg" onclick="toggleCategory(this, 'MAP')">

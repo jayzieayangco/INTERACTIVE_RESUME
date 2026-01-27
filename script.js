@@ -1,20 +1,37 @@
 let activeTab = null;
 const originalContent = document.getElementById('cardContent').innerHTML;
-const originalLabel = "PLAYER PROFILE";
+const originalLabel = "PLAYER CARD";
+
+// Sound Logic
+const soundLevels = ["OFF", "LOW", "MED", "HIGH"];
+let currentSoundIndex = 0; // Starts at OFF
 
 const mapData = [
     { id: 1, name: "Home: Las Piñas City", desc: "1285 Fruto Santos Avenue, Zapote.", x: 10, y: 80 },
     { id: 2, name: "Zapote Elementary School", desc: "Primary education (2011-2017).", x: 10, y: 65 },
-    { id: 3, name: "Las Piñas North National HS", desc: "High School Journey (2017-2021).", x: 25, y: 65 },
+    { id: 3, name: "Las Piñas North National HS", desc: "Junior High School(2017-2021).", x: 25, y: 65 },
     { id: 4, name: "Holy Rosary Academy", desc: "Senior High School (2021-2023).", x: 25, y: 50 },
-    { id: 5, name: "PERCDC LearnHub", desc: "First Internship placement (2023).", x: 40, y: 50 },
-    { id: 6, name: "PUP Parañaque (Y1-2)", desc: "Engineering studies (2023-2025).", x: 55, y: 50 },
+    { id: 5, name: "PERCDC LearnHub", desc: "First Internship (2023).", x: 40, y: 50 },
+    { id: 6, name: "PUP Parañaque (Y1-2)", desc: "College Level (2023-2025).", x: 55, y: 50 },
     { id: 7, name: "Absolute Industrial Solutions", desc: "Industry Internship (2023).", x: 55, y: 65 },
     { id: 8, name: "PUP Parañaque (Y3)", desc: "Currently a 3rd year Engineering student!", x: 70, y: 65 },
     { id: 101, name: "???", desc: "A path yet explored...", x: 70, y: 50, mystery: true },
     { id: 102, name: "???", desc: "A path yet explored...", x: 88, y: 50, mystery: true },
     { id: 103, name: "???", desc: "A path yet explored...", x: 88, y: 15, mystery: true },
-    { id: 9, name: "Japan", desc: "Dream Destination: The final goal.", x: 94, y: 15, locked: true }
+    { id: 9, name: "Japan", desc: "Dream Destination", x: 94, y: 15, locked: true }
+];
+
+const projectData = [
+    { name: 'Smart Clothesline System', desc: 'An Arduino-powered device that uses rain sensors to automatically retract clothes when it rains and redeploy them when it is dry.', type: 'ELECTRIC', icon: 'assets/pball.png' },
+    { name: 'SEED: IoT Waste Sorter', desc: 'An automated kiosk that uses sensors to identify and sort residential waste into recyclables or organic matter for composting.', type: 'FIRE', icon: 'assets/gball.png' },
+    { name: 'Adventure Quest: My Mayor', desc: 'A 2D pixel-art simulation game where players manage community issues like famine and hunger to build leadership and problem-solving skills.', type: 'WATER', icon: 'assets/uball.png' },
+    { name: 'Contactless Sanitizer Dispenser', desc: 'A low-cost, transistor-based touchless device that uses IR sensors to dispense sanitizer without physical contact.', type: 'ELECTRIC', icon: 'assets/mball.png' }
+];
+
+const credentialData = [
+    { name: 'OJT & Work Ethics', desc: 'Prepared for corporate environments through training on professional conduct, discipline, and ethical workplace standards.', icon: 'assets/tm1.png' },
+    { name: 'Value of Strong Work Ethics', desc: 'Completed advanced training on responsibility and ethical behavior within modern, high-standard workplaces.', icon: 'assets/tm2.png' },
+    { name: 'Python Foundations (SoloLearn)', desc: 'Certified in Python programming. Proficient in core syntax, logic structures, and data manipulation.', icon: 'assets/tm3.png' }
 ];
 
 function showNode(event, id) {
@@ -30,6 +47,26 @@ function closePopup() {
     if(popup) popup.style.display = 'none';
 }
 
+function resetToMain() {
+    const display = document.getElementById('mainDisplay');
+    const sidePanel = document.getElementById('sidePanel');
+    const beltContainer = document.getElementById('beltInterfaceContainer');
+    const content = document.getElementById('cardContent');
+    const label = document.getElementById('cardLabel');
+    const badges = document.getElementById('badgeSection');
+    const header = document.getElementById('cardHeader');
+
+    if (activeTab) activeTab.classList.remove('active');
+    activeTab = null;
+    display.classList.remove('ui-exit');
+    sidePanel.classList.remove('ui-exit');
+    beltContainer.innerHTML = "";
+    label.innerText = originalLabel;
+    content.innerHTML = originalContent;
+    badges.style.display = "block";
+    header.style.display = "flex";
+}
+
 function toggleCategory(element, type) {
     const display = document.getElementById('mainDisplay');
     const sidePanel = document.getElementById('sidePanel');
@@ -39,17 +76,8 @@ function toggleCategory(element, type) {
     const badges = document.getElementById('badgeSection');
     const header = document.getElementById('cardHeader');
 
-    // Resetting UI if same tab clicked
     if (activeTab === element) {
-        element.classList.remove('active');
-        activeTab = null;
-        display.style.display = "flex";
-        sidePanel.style.display = "flex";
-        beltContainer.innerHTML = "";
-        label.innerText = originalLabel;
-        content.innerHTML = originalContent;
-        badges.style.display = "block";
-        header.style.display = "flex";
+        resetToMain();
         return;
     }
 
@@ -57,17 +85,17 @@ function toggleCategory(element, type) {
     element.classList.add('active');
     activeTab = element;
 
-    // Logic to hide main display and sidebars for lower belt buttons
-    const isLowerBelt = ['PARTY', 'POKEDEX', 'KEY ITEMS', 'SETTINGS'].includes(type);
+    const isLowerBelt = ['PARTY', 'PROJECT', 'CERTIFICATE', 'SETTINGS'].includes(type);
     
     if (isLowerBelt) {
-        display.style.display = "none";
-        sidePanel.style.display = "none";
-        renderBeltScreen(type);
+        display.classList.add('ui-exit');
+        sidePanel.classList.add('ui-exit');
+        setTimeout(() => {
+            renderBeltScreen(type);
+        }, 300);
     } else {
-        // Side Panel logic (original)
-        display.style.display = "flex";
-        sidePanel.style.display = "flex";
+        display.classList.remove('ui-exit');
+        sidePanel.classList.remove('ui-exit');
         beltContainer.innerHTML = "";
         label.innerText = type;
         badges.style.display = "none";
@@ -98,38 +126,121 @@ function renderSidePanelScreen(type, content, header) {
 
 function renderBeltScreen(type) {
     const container = document.getElementById('beltInterfaceContainer');
+    container.innerHTML = ""; 
+    
+    let bgClass = "";
+    if(type === 'PARTY') bgClass = "bg-party";
+    else if(type === 'PROJECT') bgClass = "bg-project";
+    else if(type === 'CERTIFICATE') bgClass = "bg-certificate";
+    else if(type === 'SETTINGS') bgClass = "bg-settings";
+
     if (type === 'PARTY') {
         const skills = [
-            { name: 'JavaScript', lv: 3, exp: 85, icon: '📜' },
-            { name: 'Python', lv: 2, exp: 70, icon: '🐍' },
-            { name: 'C++', lv: 4, exp: 60, icon: '⚙️' },
-            { name: 'HTML/CSS', lv: 5, exp: 95, icon: '🎨' },
-            { name: 'React', lv: 1, exp: 40, icon: '⚛️' },
-            { name: 'SQL', lv: 2, exp: 55, icon: '💾' }
+            { name: 'HTML/CSS', lv: 9, exp: 80, symbol: '🌐' },
+            { name: 'React', lv: 7, exp: 75, symbol: '⚛️' },
+            { name: 'SQL', lv: 3, exp: 40, symbol: '🗄️' },
+            { name: 'JavaScript', lv: 5, exp: 60, symbol: '📜' },
+            { name: 'Python', lv: 5, exp: 65, symbol: '🐍' },
+            { name: 'C++', lv: 4, exp: 50, symbol: '⚙️' },
         ];
         
-        let slotsHTML = skills.map((s, i) => `
-            <div class="party-slot ${i === 0 ? 'active-slot' : ''}">
-                <div class="slot-icon">${s.icon}</div>
+        let titleHTML = `<h1 style="width:100%; color:white; text-align:center; font-size:3rem; margin-bottom:10px; text-shadow: 3px 3px #000;">${type}</h1>`;
+        let slotsHTML = skills.map(s => `
+            <div class="party-slot">
+                <div class="slot-icon">${s.symbol}</div>
                 <div class="slot-info">
-                    <div class="slot-header">
-                        <span class="slot-name">${s.name}</span>
-                        <span class="slot-level">Lv. ${s.lv} Year(s)</span>
-                    </div>
+                    <div class="slot-header"><span class="slot-name">${s.name}</span><span class="slot-level">Lv. ${s.lv}</span></div>
                     <div class="hp-container">
-                        <div class="hp-bar" style="width: ${s.exp}%; background: ${s.exp > 50 ? '#78c850' : s.exp > 20 ? '#f8d030' : '#f85858'}"></div>
+                        <div class="hp-bar" style="width: ${s.exp}%; background: ${s.exp > 50 ? '#78c850' : '#f8d030'}"></div>
                         <div class="hp-text">${s.exp}/100 PRO</div>
                     </div>
                 </div>
             </div>
         `).join('');
 
-        container.innerHTML = `<div class="party-screen-full"><h1 style="width:100%; color:white; text-align:center; font-size:3rem; margin-bottom:10px; text-shadow: 3px 3px #000;">TECH STACK PARTY</h1>${slotsHTML}</div>`;
-    } else if (type === 'POKEDEX') {
-        container.innerHTML = `<div class="generic-screen"><h1>POKEDEX - PROJECTS</h1><p>[Fire] Web App Portfolio</p><p>[Water] Database Management System</p><p>[Grass] Interactive Resume</p></div>`;
-    } else if (type === 'KEY ITEMS') {
-        container.innerHTML = `<div class="generic-screen"><h1>KEY ITEMS - CREDENTIALS</h1><p>📜 Web Development Certification</p><p>📜 Data Science Essentials</p></div>`;
-    } else if (type === 'SETTINGS') {
-        container.innerHTML = `<div class="generic-screen"><h1>SETTINGS</h1><p>Sound: ON</p><p>Text Speed: FAST</p></div>`;
+        container.innerHTML = `<div class="party-screen-full ${bgClass}">${titleHTML}${slotsHTML}
+            <div class="bag-item-row" style="position:absolute; bottom:80px; right:40px; background:#f85858; color:white; border:4px solid #fff; border-radius:10px; width:150px; justify-content:center; box-shadow: 4px 4px 0 #000;" onclick="resetToMain()">
+               <span class="select-arrow" style="visibility:visible; color:white;">▶</span> CLOSE
+            </div></div>`;
+        return;
     }
+
+    if(type === 'SETTINGS') {
+        container.innerHTML = `
+        <div class="party-screen-full bg-settings">
+            <div class="bag-wrapper">
+                <div class="bag-visual-panel" style="height: 100px; flex: none;">
+                    <h2 style="font-size:3.5rem; color:#fff; text-shadow:2px 2px #000;">OPTION</h2>
+                </div>
+                <div class="settings-menu">
+                    <div class="settings-row" onclick="updateSetting('SOUND')">
+                        <span>SOUND</span>
+                        <span class="settings-value" id="soundVal">${soundLevels[currentSoundIndex]}</span>
+                    </div>
+                    <div class="settings-row">
+                        <span>BUTTON MODE</span>
+                        <span class="settings-value">HELP</span>
+                    </div>
+                    <div class="settings-row">
+                        <span>FRAME</span>
+                        <span class="settings-value">TYPE 1</span>
+                    </div>
+                    <div class="settings-row" style="color:#f85858; border:none;" onclick="resetToMain()">
+                        <span>CANCEL</span>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        return;
+    }
+
+    // Handle PROJECT and CERTIFICATE
+    let listData = type === 'PROJECT' ? projectData : credentialData;
+    let listHTML = listData.map((item, i) => `
+        <div class="bag-item-row ${i === 0 ? 'selected' : ''}" onclick="updateBagDetail(this, '${item.desc}', '${item.icon}')">
+            <span class="select-arrow">▶</span> ${item.name}
+        </div>`).join('');
+
+    container.innerHTML = `
+        <div class="party-screen-full ${bgClass}">
+            <div class="bag-wrapper">
+                <div class="bag-top-row">
+                    <div class="bag-visual-panel">
+                        <div class="bag-main-icon" id="bagLargeIcon"><img src="${listData[0].icon}" style="width:120px; height:120px; object-fit:contain;"></div>
+                        <h2 style="font-size:2.5rem; color:#fff; text-shadow:2px 2px #000;">${type}</h2>
+                    </div>
+                    <div class="bag-list-panel">
+                        ${listHTML}
+                        <div class="bag-item-row" onclick="resetToMain()"><span class="select-arrow">▶</span> CLOSE</div>
+                    </div>
+                </div>
+                <div class="bag-description-box" id="bagDescText">${listData[0].desc}</div>
+            </div>
+        </div>`;
+}
+
+function updateSetting(type) {
+    if(type === 'SOUND') {
+        currentSoundIndex = (currentSoundIndex + 1) % soundLevels.length;
+        const level = soundLevels[currentSoundIndex];
+        document.getElementById('soundVal').innerText = level;
+        
+        const music = document.getElementById('bgMusic');
+        if(level === "OFF") {
+            music.pause();
+        } else {
+            if(level === "LOW") music.volume = 0.2;
+            if(level === "MED") music.volume = 0.5;
+            if(level === "HIGH") music.volume = 1.0;
+            music.play().catch(e => console.log("User interaction required for audio"));
+        }
+    }
+}
+
+function updateBagDetail(element, desc, iconPath) {
+    const rows = document.querySelectorAll('.bag-item-row');
+    rows.forEach(r => r.classList.remove('selected'));
+    element.classList.add('selected');
+    document.getElementById('bagDescText').innerText = desc;
+    document.getElementById('bagLargeIcon').innerHTML = `<img src="${iconPath}" style="width:120px; height:120px; object-fit:contain;">`;
 }
