@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer Profile Resume</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'VT323', monospace;
+        }
+
+        .desktop-wrapper {
+            width: 100vw; height: 100vh;
+            background: repeating-linear-gradient(0deg, #205880, #205880 4px, #286898 4px, #286898 8px);
+            display: flex;
+            justify-content: flex-end; 
+            align-items: center;
+            border: 10px solid #000;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* --- LOWER BELT --- */
+        .belt-container {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 100px;
+            display: flex; justify-content: center; align-items: flex-end; z-index: 25;
+        }
+        .belt-bar {
+            position: absolute; bottom: 0; width: 100%; height: 50px;
+            background: #a0a0a0; border-top: 4px solid #fff; border-bottom: 4px solid #404040;
+            box-shadow: 0 -4px 0 #606060;
+        }
+        .button-row { position: relative; display: flex; gap: 50px; margin-bottom: 15px; z-index: 30; }
+        .belt-btn {
+            width: 65px; height: 65px;
+            background: linear-gradient(135deg, #eee 0%, #bbb 100%);
+            border: 4px solid #000; border-radius: 12px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; font-size: 2.2rem;
+            box-shadow: 0 6px 0 #404040, 4px 8px 10px rgba(0,0,0,0.5);
+            transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
+        }
+        .belt-btn:hover { background: #fff; transform: translateY(-2px); }
+        .belt-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #404040; }
+        .belt-btn.active { background: #f8d070; border-color: #fff; }
+
+        /* --- SIDE PANELS --- */
+        .side-panel {
+            width: 220px; height: 75%; display: flex; flex-direction: column;
+            justify-content: center; gap: 20px; z-index: 10; margin-right: 0;
+            align-items: flex-end; transform: translateY(-40px);
+        }
+        .nav-category {
+            width: 100%; height: 160px; border: 4px solid #403018;
+            border-radius: 12px 0 0 12px; cursor: pointer; position: relative;
+            box-shadow: -6px 6px 0px rgba(0,0,0,0.4);
+            transition: width 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28), filter 0.2s;
+            filter: brightness(0.8); display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+        }
+        .nav-category:hover { filter: brightness(1); width: 110%; }
+        .nav-category.active { width: 130% !important; filter: brightness(1.2); border-color: #fff; z-index: 11; }
+        
+        .map-bg { background: #70c0f8; }
+        .award-bg { background: #f8a0a0; }
+        .nurse-bg { background: #f8e8a0; }
+
+        .panel-label {
+            position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.7);
+            color: white; text-align: center; font-size: 1.8rem; padding: 4px 0; z-index: 5;
+        }
+
+        /* --- ICONS --- */
+        .shape-container {
+            width: 80px; height: 80px; position: relative; display: flex; justify-content: center; align-items: center;
+            transform: translateY(-10px);
+        }
+
+        .globe-shape {
+            width: 60px; height: 60px; background: #90e0ff; border-radius: 50%; border: 4px solid #103050;
+            position: relative; box-shadow: inset -5px -5px 0 rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .globe-shape::before { 
+            content: ''; position: absolute; width: 100%; height: 4px; background: #103050; top: 50%; transform: translateY(-50%);
+        }
+        .globe-shape::after { 
+            content: ''; position: absolute; width: 25px; height: 100%; border: 4px solid #103050; border-radius: 50%; left: 50%; transform: translateX(-50%);
+        }
+
+        .pokeball-side {
+            width: 60px; height: 60px; background: #fff; border-radius: 50%; border: 4px solid #403018;
+            position: relative; overflow: hidden; background: linear-gradient(to bottom, #f85858 50%, #fff 50%);
+            box-shadow: inset -4px -4px 0 rgba(0,0,0,0.1);
+        }
+        .pokeball-side::before {
+            content: ''; position: absolute; width: 100%; height: 6px; background: #403018; top: 50%; transform: translateY(-50%);
+        }
+        .pokeball-side::after {
+            content: ''; position: absolute; width: 16px; height: 16px; background: #fff; border: 4px solid #403018; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+
+        .phone-shape {
+            width: 45px; height: 45px; position: relative; transform: rotate(-170deg);
+        }
+        .phone-shape::before { 
+            content: ''; position: absolute; width: 40px; height: 40px; border: 10px solid #403018; border-radius: 50%; border-bottom-color: transparent; border-left-color: transparent; top: 5px; left: -10px;
+        }
+        .phone-shape::after { 
+            content: ''; position: absolute; width: 16px; height: 22px; background: #403018; border-radius: 6px; bottom: -17px; right: 2px; transform: rotate(46deg);
+        }
+        .phone-earpiece { 
+            position: absolute; width: 16px; height: 22px; background: #403018; border-radius: 6px; top: 11px; left: -7px; transform: rotate(45deg); z-index: 2;
+        }
+
+        /* --- TRAINER CARD --- */
+        .trainer-card {
+            position: absolute; left: 5%; width: 70%; max-width: 1100px; 
+            height: 80%; max-height: 700px; 
+            background: #fff;
+            background-image: linear-gradient(#e0f8e0 2px, transparent 2px);
+            background-size: 100% 4px;
+            border: 8px solid #306090;
+            border-radius: 25px;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column; overflow: hidden; transform: translateY(-40px);
+        }
+
+        .header { 
+            background: #a8e8a8;
+            border-bottom: 6px solid #58a080;
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 10px 30px; z-index: 110; flex-shrink: 0;
+        }
+        .label-tab { background: #68a0f8; border: 4px solid #000; padding: 2px 20px; font-size: 2.2rem; color: #000; box-shadow: 2px 2px 0 #000; }
+        .id-text { font-size: 2.5rem; color: #404040; font-weight: bold; }
+
+        .main-body { display: flex; flex: 1; position: relative; padding: 20px 40px; overflow: hidden; }
+        
+        .left-info { flex: 1.5; display: flex; flex-direction: column; gap: 15px; padding-top: 10px; z-index: 10; }
+        .info-row { 
+            display: flex; align-items: center; font-size: 3rem; color: #333; 
+            white-space: nowrap; width: 100%;
+        }
+        .info-row span.bullet { 
+            margin-right: 15px; background: #78c850; width: 15px; height: 15px; 
+            border: 2px solid #387858; display: inline-block; flex-shrink: 0; 
+        }
+        .label-text { min-width: 120px; display: inline-block; }
+        .underline { 
+            border-bottom: 4px solid #a0a0a0; flex-grow: 1; display: inline-block; 
+            padding-left: 10px; margin-right: 20px;
+        }
+
+        .avatar-container { flex: 1; display: flex; justify-content: center; align-items: flex-end; position: relative; }
+        
+        .pokeball-graphic { 
+            position: absolute; width: 320px; height: 320px; 
+            background: #a8e8a8; border-radius: 50%;
+            border: 20px solid #ffffff;
+            mask-image: radial-gradient(circle, transparent 20%, black 21%);
+            -webkit-mask-image: radial-gradient(circle, transparent 20%, black 21%);
+            display: flex; justify-content: center; align-items: center;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+        .pokeball-graphic::after { content: ''; position: absolute; width: 100%; height: 15px; background: #fff; }
+
+        .sprite-img { 
+            width: 550px; height: 440px; object-fit: contain; z-index: 5;
+            image-rendering:auto; filter: drop-shadow(5px 5px 0 rgba(0,0,0,0.1));
+            position: relative; bottom: -50px;
+        }
+
+        /* --- FAVORITES SUMMARY SCREEN STYLE --- */
+        .fav-screen {
+            position: absolute; top: 0; left: 0;
+            display: flex; width: 100%; height: 100%; background: #f8a0a0;
+            font-family: 'VT323', monospace; color: #fff; z-index: 100;
+        }
+        .fav-left {
+            flex: 1; background: #f8c0c0; border: 4px solid #a04040; margin: 15px;
+            display: flex; flex-direction: column; align-items: center; padding: 15px;
+            position: relative; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.1);
+        }
+        .fav-right {
+            flex: 1.5; display: flex; flex-direction: column; gap: 10px; margin: 15px;
+        }
+        .fav-header-box {
+            background: #f8f8f8; color: #a04040; padding: 5px 15px; border-radius: 10px;
+            border: 3px solid #a04040; font-size: 2.2rem; display: flex; justify-content: space-between;
+        }
+        .fav-info-block {
+            background: #fff; border: 4px solid #a04040; border-radius: 10px;
+            padding: 15px; color: #333; font-size: 1.8rem; flex-grow: 1;
+        }
+        .fav-row { display: flex; justify-content: space-between; border-bottom: 2px solid #eee; margin-bottom: 8px; }
+        .fav-label { color: #a04040; font-weight: bold; }
+        
+        .fav-sprite-placeholder {
+            width: 280px; height: 280px; background: radial-gradient(#fff, #f8c0c0);
+            border-radius: 50%; margin: 20px 0; display: flex; align-items: center; justify-content: center;
+            border: 8px solid #a04040; overflow: hidden;
+        }
+        .fav-photo-frame { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- CONTACT SCREEN STYLE (NURSE JOY THEME) --- */
+        .contact-screen {
+            position: absolute; top: 0; left: 0;
+            display: flex; width: 100%; height: 100%; background: #f8e8a0;
+            font-family: 'VT323', monospace; z-index: 100; padding: 20px; box-sizing: border-box;
+        }
+        .contact-card {
+            background: #fff; border: 6px solid #e0c068; border-radius: 15px;
+            flex: 1; display: flex; flex-direction: column; padding: 20px; gap: 15px;
+        }
+        .contact-header { font-size: 2.5rem; color: #c09000; border-bottom: 4px solid #f8e8a0; padding-bottom: 5px; }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex: 1; }
+        .contact-btn {
+            background: #f8f8f8; border: 4px solid #e0c068; border-radius: 10px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-decoration: none; color: #333; transition: transform 0.2s, background 0.2s;
+        }
+        .contact-btn:hover { background: #f8e8a0; transform: scale(1.05); }
+        .contact-icon { font-size: 3rem; margin-bottom: 5px; }
+        .contact-text { font-size: 1.5rem; text-align: center; }
+
+        /* --- BADGE SECTION --- */
+        .badge-section { 
+            background: #a8e8a8; border-top: 6px solid #58a080; padding: 5px 30px 10px 30px; 
+            flex-shrink: 0; z-index: 150; position: relative;
+        }
+        .badge-title { font-size: 1.8rem; color: #fff; text-shadow: 2px 2px 0 #000; letter-spacing: 2px; margin-bottom: 5px; }
+        .badge-grid { display: flex; justify-content: center; gap: 45px; width: 100%; }
+        .badge-box { 
+            position: relative; flex: 0 1 75px; aspect-ratio: 1 / 1; max-width: 75px; 
+            background: rgba(255,255,255,0.4); display: flex; justify-content: center; align-items: center; font-size: 2.5rem; 
+        }
+        .badge-box::before, .badge-box::after, .badge-box-inner::before, .badge-box-inner::after {
+            content: ''; position: absolute; width: 12px; height: 12px; border: 3px solid #58a080;
+        }
+        .badge-box::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+        .badge-box::after { top: 0; right: 0; border-left: none; border-bottom: none; }
+        .badge-box-inner { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+        .badge-box-inner::before { bottom: 0; left: 0; border-right: none; border-top: none; }
+        .badge-box-inner::after { bottom: 0; right: 0; border-left: none; border-top: none; }
+        .badge-box img { width: 100%; height: 100%; object-fit: contain; image-rendering:pixelated; }
+        .badge-popup {
+            position: absolute; bottom: 115%; left: 50%; transform: translateX(-50%);
+            background: #fff; border: 4px solid #306090; padding: 8px 12px; font-size: 1.4rem;
+            width: 200px; text-align: center; box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+            display: none; z-index: 1000; pointer-events: none; color: #000;
+        }
+        .badge-box.has-info:hover .badge-popup { display: block; }
+
+        /* --- MAP DESIGN --- */
+        .map-screen-wrapper {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 100; background: #5880f8; cursor: default;
+        }
+        .map-landmass {
+            position: absolute; background: #78c850; border: 4px solid #205840;
+            box-shadow: inset -10px -10px 0 rgba(0,0,0,0.1); z-index: 1;
+        }
+        .map-decoration { position: absolute; font-size: 1.2rem; z-index: 2; pointer-events: none; opacity: 0.7; }
+        .map-container {
+            width: 100%; height: 100%; position: relative;
+            background-image: radial-gradient(rgba(255,255,255,0.3) 1px, transparent 1px);
+            background-size: 20px 20px; z-index: 2;
+        }
+        .map-node {
+            position: absolute; width: 22px; height: 22px; background: #f85858; border: 3px solid #000;
+            box-shadow: inset -4px -4px 0 #a04040; cursor: pointer; z-index: 120;
+            transition: transform 0.2s; transform: translate(-50%, -50%);
+        }
+        .map-node:hover { transform: translate(-50%, -50%) scale(1.3); background: #fff; }
+        .map-node.locked { background: #707070; box-shadow: inset -4px -4px 0 #404040; border-color: #222; }
+        .map-route-v { position: absolute; width: 10px; background: #f8a050; border: 2px solid #000; z-index: 110; pointer-events: none;}
+        .map-route-h { position: absolute; height: 10px; background: #f8a050; border: 2px solid #000; z-index: 110; pointer-events: none;}
+        .route-bridge { opacity: 0.6; background: #a0a0a0 !important; border-style: dashed !important; }
+        .map-popup {
+            position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
+            width: 50%; max-width: 350px; background: #fff; border: 5px solid #404040;
+            padding: 10px; font-size: 1.5rem; z-index: 200; display: none; 
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.3); border-radius: 2px; pointer-events: none;
+        }
+
+        .crt-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background-size: 100% 4px, 3px 100%; pointer-events: none; z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="crt-overlay"></div>
+
+    <div class="desktop-wrapper">
+        <div class="trainer-card" id="mainDisplay">
+            <div class="header" id="cardHeader">
+                <div class="label-tab" id="cardLabel">PLAYER CARD</div>
+                <div class="id-text" id="cardID">No. ID / 47903</div>
+            </div>
+
+            <div class="main-body" id="cardContent">
+                <div class="left-info">
+                    <div class="info-row"><span class="bullet"></span> <div class="label-text">NAME</div> <div class="underline">Lunos</div></div>
+                    <div class="info-row"><span class="bullet"></span> <div class="label-text">COURSE</div> <div class="underline">Computer Engineering</div></div>
+                    <div class="info-row"><span class="bullet"></span> <div class="label-text">CLASS</div> <div class="underline">Web Developer</div></div>
+                    <div class="info-row"><span class="bullet"></span> <div class="label-text">LEVEL</div> <div class="underline">3rd Year</div></div>
+                    <div class="info-row"><span class="bullet"></span> <div class="label-text">STARTED</div> <div class="underline">Aug. 24, 2005</div></div>
+                </div>
+
+                <div class="avatar-container">
+                    <div class="pokeball-graphic"></div>
+                    <img src="assets/avatar4.png" id="avatarSprite" class="sprite-img">
+                </div>
+            </div>
+
+            <div class="badge-section" id="badgeSection">
+                <div class="badge-title">BADGES</div>
+                <div class="badge-grid">
+                    <div class="badge-box has-info">
+                        <div class="badge-box-inner"></div>
+                        <img src="assets/badge1.png" alt="">
+                        <div class="badge-popup"><b>Leader in Me</b><br>Exceptional duty during SHS internship.</div>
+                    </div>
+                    <div class="badge-box has-info">
+                        <div class="badge-box-inner"></div>
+                        <img src="assets/badge2.png" alt="">
+                        <div class="badge-popup"><b>CSC Rep</b><br>Course Representative (2024-2025).</div>
+                    </div>
+                    <div class="badge-box has-info">
+                        <div class="badge-box-inner"></div>
+                        <img src="assets/badge3.png" alt="">
+                        <div class="badge-popup"><b>Math Silver</b><br>2nd Place Basic Math - 120th PUP Founding.</div>
+                    </div>
+                    <div class="badge-box has-info">
+                        <div class="badge-box-inner"></div>
+                        <img src="assets/badge4.png" alt="">
+                        <div class="badge-popup"><b>Student Scholar</b><br>Assoc. of University Scholars of the PH.</div>
+                    </div>
+                    <div class="badge-box has-info">
+                        <div class="badge-box-inner"></div>
+                        <img src="assets/badge5.png" alt="">
+                        <div class="badge-popup"><b>Web Dev</b><br>The Patriot Organization Web Developer.</div>
+                    </div>
+                    <div class="badge-box"><div class="badge-box-inner"></div></div>
+                    <div class="badge-box"><div class="badge-box-inner"></div></div>
+                    <div class="badge-box"><div class="badge-box-inner"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="belt-container">
+            <div class="button-row">
+                <div class="belt-btn" onclick="toggleCategory(this, 'PARTY')">🐾</div>
+                <div class="belt-btn" onclick="toggleCategory(this, 'POKEDEX')">📖</div>
+                <div class="belt-btn" onclick="toggleCategory(this, 'KEY ITEMS')">🔑</div>
+                <div class="belt-btn" onclick="toggleCategory(this, 'SETTINGS')">⚙️</div>
+            </div>
+            <div class="belt-bar"></div>
+        </div>
+
+        <div class="side-panel">
+            <div class="nav-category map-bg" onclick="toggleCategory(this, 'MAP')">
+                <div class="shape-container"><div class="globe-shape"></div></div>
+                <div class="panel-label">MAP</div>
+            </div>
+            <div class="nav-category award-bg" onclick="toggleCategory(this, 'FAVORITES')">
+                <div class="shape-container"><div class="pokeball-side"></div></div>
+                <div class="panel-label">PROFILE</div>
+            </div>
+            <div class="nav-category nurse-bg" onclick="toggleCategory(this, 'CONTACT')">
+                <div class="shape-container">
+                    <div class="phone-shape">
+                        <div class="phone-earpiece"></div>
+                    </div>
+                </div>
+                <div class="panel-label">CONTACT</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let activeTab = null;
+        const originalContent = document.getElementById('cardContent').innerHTML;
+        const originalLabel = "PLAYER PROFILE";
+
+        const mapData = [
+            { id: 1, name: "Home: Las Piñas City", desc: "1285 Fruto Santos Avenue, Zapote.", x: 10, y: 80 },
+            { id: 2, name: "Zapote Elementary School", desc: "Primary education (2011-2017).", x: 10, y: 65 },
+            { id: 3, name: "Las Piñas North National HS", desc: "High School Journey (2017-2021).", x: 25, y: 65 },
+            { id: 4, name: "Holy Rosary Academy", desc: "Senior High School (2021-2023).", x: 25, y: 50 },
+            { id: 5, name: "PERCDC LearnHub", desc: "First Internship placement (2023).", x: 40, y: 50 },
+            { id: 6, name: "PUP Parañaque (Y1-2)", desc: "Engineering studies (2023-2025).", x: 55, y: 50 },
+            { id: 7, name: "Absolute Industrial Solutions", desc: "Industry Internship (2023).", x: 55, y: 65 },
+            { id: 8, name: "PUP Parañaque (Y3)", desc: "Currently a 3rd year Engineering student!", x: 70, y: 65 },
+            { id: 101, name: "???", desc: "A path yet explored...", x: 70, y: 50, mystery: true },
+            { id: 102, name: "???", desc: "A path yet explored...", x: 88, y: 50, mystery: true },
+            { id: 103, name: "???", desc: "A path yet explored...", x: 88, y: 15, mystery: true },
+            { id: 9, name: "Japan", desc: "Dream Destination: The final goal.", x: 94, y: 15, locked: true }
+        ];
+
+        function showNode(event, id) {
+            event.stopPropagation();
+            const popup = document.getElementById('mapPopup');
+            const node = mapData.find(n => n.id === id);
+            popup.style.display = 'block';
+            popup.innerHTML = `<strong style="color:#f85858;">${node.name}</strong><br>${node.desc}`;
+        }
+
+        function closePopup() {
+            const popup = document.getElementById('mapPopup');
+            if(popup) popup.style.display = 'none';
+        }
+
+        function toggleCategory(element, type) {
+            const content = document.getElementById('cardContent');
+            const label = document.getElementById('cardLabel');
+            const badges = document.getElementById('badgeSection');
+            const header = document.getElementById('cardHeader');
+
+            if (activeTab === element) {
+                element.classList.remove('active');
+                activeTab = null;
+                label.innerText = originalLabel;
+                content.innerHTML = originalContent;
+                badges.style.display = "block";
+                header.style.display = "flex";
+                return;
+            }
+
+            if (activeTab) activeTab.classList.remove('active');
+            element.classList.add('active');
+            activeTab = element;
+
+            label.innerText = type;
+            badges.style.display = "none";
+            
+            if(type === 'MAP') {
+                header.style.display = "none";
+                let nodesHTML = mapData.map(n => `<div class="map-node ${n.mystery || n.locked ? 'locked' : ''}" style="left:${n.x}%; top:${n.y}%" onclick="showNode(event, ${n.id})"></div>`).join('');
+                let decoHTML = "";
+                let treesCount = 0;
+                while(treesCount < 12) {
+                    let rx = Math.random() * 80;
+                    let ry = 35 + Math.random() * 50;
+                    if (rx < 75) { decoHTML += `<div class="map-decoration" style="left:${rx}%; top:${ry}%">🌲</div>`; treesCount++; }
+                }
+                content.innerHTML = `<div class="map-screen-wrapper" onclick="closePopup()"><div class="map-landmass" style="width: 15%; height: 10%; top: 5%; left: 40%; border-radius: 20px;"></div><div class="map-landmass" style="width: 82%; height: 65%; top: 32%; left: -2%; border-radius: 0 120px 100px 0;"></div><div class="map-landmass" style="width: 20%; height: 25%; top: 5%; left: 82%; border-radius: 40px;"></div><div class="map-container"><div class="map-route-v" style="left: 10%; top: 65%; height: 15%;"></div><div class="map-route-h" style="left: 10%; top: 65%; width: 15%;"></div><div class="map-route-v" style="left: 25%; top: 65%; height: 0%;"></div><div class="map-route-v" style="left: 25%; top: 50%; height: 15%;"></div><div class="map-route-h" style="left: 25%; top: 50%; width: 15%;"></div><div class="map-route-h" style="left: 40%; top: 50%; width: 15%;"></div><div class="map-route-v" style="left: 55%; top: 50%; height: 15%;"></div><div class="map-route-h" style="left: 55%; top: 65%; width: 15%;"></div><div class="map-route-v route-bridge" style="left: 70%; top: 50%; height: 15%;"></div><div class="map-route-h route-bridge" style="left: 70%; top: 50%; width: 18%;"></div><div class="map-route-v route-bridge" style="left: 88%; top: 15%; height: 35%;"></div><div class="map-route-h route-bridge" style="left: 88%; top: 15%; width: 6%;"></div>${decoHTML}${nodesHTML}<div class="map-popup" id="mapPopup"></div></div></div>`;
+            } else if (type === 'FAVORITES') {
+                header.style.display = "none";
+                content.innerHTML = `
+                    <div class="fav-screen">
+                        <div class="fav-left">
+                            <div style="font-size:2rem; width:100%; border-bottom:3px solid #a04040;">JAYZIE / Lv. 20</div>
+                            <div class="fav-sprite-placeholder">
+                                <img src="assets/1x1.png" alt="Profile Photo" class="fav-photo-frame">
+                            </div>
+                            <div style="text-align:center;">
+                                <div style="font-size:2rem; color:#a04040;">STUDENT</div>
+                                <div style="font-size:2.5rem; color:#fff; text-shadow:2px 2px #a04040;">♂</div>
+                            </div>
+                        </div>
+                        <div class="fav-right">
+                            <div class="fav-header-box">
+                                <span>PROFILE</span>
+                                <span>No. 67</span>
+                            </div>
+                            <div class="fav-info-block">
+                                <div class="fav-row"><span class="fav-label">FAV COLOR</span> <span>Blue</span></div>
+                                <div class="fav-row"><span class="fav-label">LOVES</span> <span>Eating</span></div>
+                                <div class="fav-row"><span class="fav-label">NATURE</span> <span>Laid-back</span></div>
+                                <div class="fav-row"><span class="fav-label">CURRENT QUEST</span> <span>Graduate</span></div>
+                                <div style="margin-top:20px; font-size:1.5rem; line-height:1.2;">
+                                    "Digital design just seems to click for him without much fuss. While he's highly capable in Engineering, it prefers to keep a steady, easygoing pace through life."
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'CONTACT') {
+                header.style.display = "none";
+                content.innerHTML = `
+                    <div class="contact-screen">
+                        <div class="contact-card">
+                            <div class="contact-header">REACH OUT - CALL ME?</div>
+                            <div class="contact-grid">
+                                <a href="mailto:ayangcojayz@gmail.com" class="contact-btn">
+                                    <div class="contact-icon">✉️</div>
+                                    <div class="contact-text">EMAIL<br><small>ayangcojayz@gmail.com</small></div>
+                                </a>
+                                <a href="https://linkedin.com" target="_blank" class="contact-btn">
+                                    <div class="contact-icon">ⓕ</div>
+                                    <div class="contact-text">FACEBOOK<br><small>Jayzie Ayangco</small></div>
+                                </a>
+                                <a href="https://github.com" target="_blank" class="contact-btn">
+                                    <div class="contact-icon">🐙</div>
+                                    <div class="contact-text">GITHUB<br><small>View My Code</small></div>
+                                </a>
+                                <a href="#" class="contact-btn">
+                                    <div class="contact-icon">📱</div>
+                                    <div class="contact-text">MESSAGE<br><small>09920610392</small></div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>`;
+            } else {
+                header.style.display = "flex";
+                if(type === 'PARTY') content.innerHTML = "<div style='font-size:3rem; padding:20px;'><b>TECH STACK</b><br>Skill Orbs: 🟢 🔵 🔴 🟡 ⚪ 🟣<br>Top Languages: JS, Python, C++</div>";
+                else if(type === 'POKEDEX') content.innerHTML = "<div style='font-size:3rem; padding:20px;'><b>PROJECTS</b><br>[Fire] Web App<br>[Water] Database<br>[Grass] Mobile Game</div>";
+                else if(type === 'KEY ITEMS') content.innerHTML = "<div style='font-size:3rem; padding:20px;'><b>CREDENTIALS</b><br>📜 Cert: Web Dev<br>📜 Cert: Data Science</div>";
+                else if(type === 'SETTINGS') content.innerHTML = "<div style='font-size:3rem; padding:20px;'><b>OPTIONS</b><br>Volume: ||||||||<br>Text Speed: Fast</div>";
+            }
+        }
+    </script>
+</body>
+</html>
