@@ -8,6 +8,19 @@
 </head>
 <body>
 
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <h1 class="loading-logo">LOADING</h1>
+            <div class="progress-container">
+                <div class="progress-bar-bg">
+                    <div id="progressBar" class="progress-bar-fill"></div>
+                    <img src="assets/psyduck.webp" id="rollingPball" class="rolling-pball" alt="">
+                </div>
+            </div>
+            <div id="startPrompt" class="start-prompt" onclick="startApp()" style="display: none;">PRESS START</div>
+        </div>
+    </div>
+
     <div class="crt-overlay"></div>
 
     <div class="desktop-wrapper">
@@ -16,7 +29,7 @@
         <div class="trainer-card" id="mainDisplay">
             <div class="header" id="cardHeader">
                 <div class="label-tab" id="cardLabel">PLAYER CARD</div>
-                <div class="id-text" id="cardID">No. ID / 47903</div>
+                <div class="id-text" id="cardID">ID No. / 2023-00048-PQ-0</div>
             </div>
 
             <div class="main-body" id="cardContent">
@@ -71,10 +84,10 @@
 
         <div class="belt-container">
             <div class="button-row">
-                <div class="belt-btn" onclick="toggleCategory(this, 'PARTY')"><img src="assets/btn_party.png" class="belt-icon-img"></div>
-                <div class="belt-btn" onclick="toggleCategory(this, 'PROJECT')"><img src="assets/btn_pokedex.png" class="belt-icon-img"></div>
-                <div class="belt-btn" onclick="toggleCategory(this, 'CERTIFICATE')"><img src="assets/btn_items.png" class="belt-icon-img"></div>
-                <div class="belt-btn" onclick="toggleCategory(this, 'SETTINGS')"><img src="assets/btn_settings.png" class="belt-icon-img"></div>
+                <div class="belt-btn btn-party" onclick="toggleCategory(this, 'PARTY')"><img src="assets/stuff.png" class="belt-icon-img"></div>
+                <div class="belt-btn btn-project" onclick="toggleCategory(this, 'PROJECT')"><img src="assets/case.png" class="belt-icon-img"></div>
+                <div class="belt-btn btn-cert" onclick="toggleCategory(this, 'CERTIFICATE')"><img src="assets/mail.png" class="belt-icon-img"></div>
+                <div class="belt-btn btn-settings" onclick="toggleCategory(this, 'SETTINGS')"><img src="assets/key.png" class="belt-icon-img"></div>
             </div>
             <div class="belt-bar"></div>
         </div>
